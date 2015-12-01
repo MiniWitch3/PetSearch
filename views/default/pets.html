@@ -1,4 +1,42 @@
 {{left_sidebar_enabled,right_sidebar_enabled=False,('message' in globals())}}
 {{extend 'layout.html'}}
 
-{{end}}
+<script>
+$(function() {
+
+   var.MAIN = new Ractive({
+      el: '#target',
+      template: '#template',
+      delimiters: ['{%', '%}'],
+      tripleDelimiters: ['{%%', '%%}'],
+      data: {
+
+      },
+   });
+
+   // http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
+  function generateUUID(){
+    var d = new Date().getTime();
+    if(window.performance && typeof window.performance.now === "function"){
+        d += performance.now();; //use high-precision timer if available
+    }
+    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = (d + Math.random()*16)%16 | 0;
+        d = Math.floor(d/16);
+        return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+    });
+    return uuid;
+  }
+
+  //edit pet profile
+  MAIN.on("edit_pet", function(e){
+
+  });
+
+  //delete pet profile :(
+  MAIN.on("delete_pet", function(e){
+
+  });
+
+});
+</script>
