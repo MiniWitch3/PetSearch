@@ -8,9 +8,8 @@
         {{=A('Sign Up', _class='btn btn-danger', _href=URL('default', 'user', args=['register']))}}
 		{{=A('Sign In', _class='btn btn-success', _style='margin-left: 10px', _href=URL('default', 'user', args=['login']))}}
 	{{else:}}
-
+        {{=A('New Pet', _class='btn btn-success', _href=URL('default', 'admin'))}}
     {{pass}}
-
 </div>
 
 <script id="template" type="text/ractive">
