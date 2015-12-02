@@ -1,24 +1,13 @@
 # -*- coding: utf-8 -*-
 # this file is released under public domain and you can use without limitations
 
-#########################################################################
-## This is a sample controller
-## - index is the default action of any application
-## - user is required for authentication and authorization
-## - download is for downloading files uploaded in the db (does streaming)
-#########################################################################
+from gluon import utils as gluon_utils
+import json
+import time
 
 def index():
-    """
-    example action using the internationalization operator T and flash
-    rendered by views/default/index.html or views/generic.html
-
-    if you need a simple wiki simply replace the two lines below with:
-    return auth.wiki()
-    """
-    logger.info("Here we are, in the controller.")
-    response.flash = T("Hello World")
-    return dict(message=T('Welcome to web2py!'))
+    pet_id = gluon_utils.web2py_uuid()
+    return dict(pet_id=pet_id)
 
 
 def user():

@@ -1,6 +1,30 @@
 {{left_sidebar_enabled,right_sidebar_enabled=False,('message' in globals())}}
 {{extend 'layout.html'}}
 
+<div id="target"></div>
+
+<div class="User">
+    {{if auth.user_id is None:}}
+        {{=A('Sign Up', _class='btn btn-danger', _href=URL('default', 'user', args=['register']))}}
+		{{=A('Sign In', _class='btn btn-success', _style='margin-left: 10px', _href=URL('default', 'user', args=['login']))}}
+	{{else:}}
+
+    {{pass}}
+
+</div>
+
+<script id="template" type="text/ractive">
+
+</script>
+
+<h2>Learn more about these Pets!</h2>
+
+{% #if loading %}
+  <div id="load_spinner">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+{% /if %}
+
 <script>
 $(function() {
 
@@ -10,7 +34,10 @@ $(function() {
       delimiters: ['{%', '%}'],
       tripleDelimiters: ['{%%', '%%}'],
       data: {
-
+        pet_dict: {},
+        pet_id: "{{=pet_id}}",
+        list_o_pets: "",
+        loading: true
       },
    });
 
@@ -37,7 +64,8 @@ $(function() {
 
    //links to corresponding pet profiles
    MAIN.on("goto_pet", function(e){
-
-
+      var el = $(e.node);
+      var pet_id = el.data("");
+      window.location = "{{=URL('default', 'pets')}}/" + pet_id;
 });
 </script>
