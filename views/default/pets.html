@@ -1,42 +1,12 @@
-{{left_sidebar_enabled,right_sidebar_enabled=False,('message' in globals())}}
 {{extend 'layout.html'}}
 
-<script>
-$(function() {
-
-   var.MAIN = new Ractive({
-      el: '#target',
-      template: '#template',
-      delimiters: ['{%', '%}'],
-      tripleDelimiters: ['{%%', '%%}'],
-      data: {
-
-      },
-   });
-
-   // http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
-  function generateUUID(){
-    var d = new Date().getTime();
-    if(window.performance && typeof window.performance.now === "function"){
-        d += performance.now();; //use high-precision timer if available
-    }
-    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = (d + Math.random()*16)%16 | 0;
-        d = Math.floor(d/16);
-        return (c=='x' ? r : (r&0x3|0x8)).toString(16);
-    });
-    return uuid;
-  }
-
-  //edit pet profile
-  MAIN.on("edit_pet", function(e){
-
-  });
-
-  //delete pet profile :(
-  MAIN.on("delete_pet", function(e){
-
-  });
-
-});
-</script>
+<div class="single_pet">
+    {{for p in pet_list}}
+       {{if p.id == int(request.args(0))}}
+       <h1 class="pet_name">{{=p.name}}</h1>
+       <div class="pet_image">{{=A(image.title, _href=URL("show_image", args=p.id))}}</div>
+       <div class="date_posted">{{p.posted}}</div>
+       <div class="pet_description">{{p.description}}</div>
+       {{pass}}
+    {{pass}}
+</div>
