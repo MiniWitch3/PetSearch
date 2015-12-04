@@ -9,6 +9,34 @@ def index():
     pet_id = gluon_utils.web2py_uuid()
     return dict(pet_id=pet_id)
 
+def get_items():
+    #ASK TA ABOUT THIS
+    pet_list = db.pets.select(
+        db.pets.house_trained == request.vars.get(house_trained) &
+        db.pets.kid_friendly == request.vars.get(kid_friendly) &
+        db.pets.pet_friendly == request.vars.get(pet_friendly) &
+        db.pets.outdoor_pet == request.vars.get(outdoor_pet) &
+        db.pets.indoor_pet == request.vars.get(indoor_pet) &
+        db.pets.frequent_exercise == request.vars.get(frequent_exercise) &
+        db.pets.infrequent_exercise == request.vars.get(infrequent_exercise) &
+        db.pets.young_pet == request.vars.get(young_pet) &
+        db.pets.older_pet == request.vars.get(older_pet)
+    )
+    return dict(pet_list=pet_list)
+
+def pet_form():
+    form = SQLFORM(db.pets)
+
+    if form.process().accepted:
+       response.flash = 'A new pet has been added.'
+    elif form.errors:
+       response.flash = 'Please fix up your form.'
+    else:
+       response.flash = 'Please fill out all that is necessary.'
+    return dict(form=form)
+
+    return dict(form=form)
+
 
 def user():
     """
