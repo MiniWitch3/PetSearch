@@ -10,30 +10,44 @@ def index():
     return dict(pet_id=pet_id)
 
 def get_pets():
-    pet_dict = db.pets.select(
-        db.pets.house_trained == request.vars.get(house_trained) &
-        db.pets.kid_friendly == request.vars.get(kid_friendly) &
-        db.pets.pet_friendly == request.vars.get(pet_friendly) &
-        db.pets.outdoor_pet == request.vars.get(outdoor_pet) &
-        db.pets.indoor_pet == request.vars.get(indoor_pet) &
-        db.pets.frequent_exercise == request.vars.get(frequent_exercise) &
-        db.pets.infrequent_exercise == request.vars.get(infrequent_exercise) &
-        db.pets.young_pet == request.vars.get(young_pet) &
-        db.pets.older_pet == request.vars.get(older_pet)
-    )
+    condition_list = []
+    user_selection = request.vars.get('user_selection[]') or request.vars.get('user_selection') or []
+    if isinstance(user_selection, (str, unicode)):
+        user_selection = [user_selection]
+    user_selection = [int(i) for i in user_selection]
+
+    for j in user_selection[0:]:
+        condition_list.append((db.pets.user_selection[j], True))
+
+    l, r = condition_list[0]
+    q = (l == r)
+    for l, r in condition_list[0:]:
+        q = q & (l == r)
+    pet_dict = db(q).select()
+
+
+    #pet_dict = db((db.pets.house_trained == request.vars.house_trained) &
+    #             (db.pets.kid_friendly == request.vars.kid_friendly) &
+    ###          (db.pets.indoor_pet == request.vars.indoor_pet) &
+    #         (db.pets.frequent_exercise == request.vars.frequent_exercise) &
+    #        (db.pets.infrequent_exercise == request.vars.infrequent_exercise) &
+    #       (db.pets.young_pet == request.vars.young_pet) &
+    #      (db.pets.older_pet == request.vars.older_pet)).select()
     return dict(pet_dict=pet_dict)
 
 def addpet():
     form = SQLFORM(db.pets)
-
     if form.process().accepted:
-       response.flash = 'A new pet has been added.'
-       redirect(URL('default', 'index'))
-    elif form.errors:
-       response.flash = 'Please fix up your form.'
+       session.flash = 'A new pet has been added.'
+       redirect(URL('index'))
     else:
-       response.flash = 'Please fill out all that is necessary.'
+       session.flash = 'Please fill out all that is necessary.'
     return dict(form=form)
+
+@auth.requires_signature
+def delete():
+    db(db.pets.id == request.args(0)).delete()
+    redirect(URL('default', 'index'))
 
 def user():
     """

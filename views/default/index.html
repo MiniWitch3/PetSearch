@@ -1,6 +1,6 @@
 {{extend 'layout.html'}}
 
-
+<div class="addpet">{{=A('New Pet', _class='btn btn-success', _href=URL('default', 'addpet'))}} </div>
 
 <div class="User">
     {{if auth.user_id is None:}}
@@ -18,8 +18,8 @@
 <script id="template" type="text/ractive">
 
 <div id="new_msg">
-<div class="line_check"><input type="checkbox" checked="{% house_trained %}"/>House Trained</div>
-<div class="line_check"><input type="checkbox" checked="{% kid_friendly %}"/>Kid Friendly</div>
+<div id="line_check"><input type="checkbox" checked="{% house_trained %}"/>House Trained</div>
+<div id="line_check"><input type="checkbox" checked="{% kid_friendly %}"/>Kid Friendly</div>
 <div class="line_check"><input type="checkbox" checked="{% pet_friendly %}"/>Pet Friendly</div>
 <div class="line_check"><input type="checkbox" checked="{% outdoor_pet %}"/>Outdoor Pet</div>
 <div class="line_check"><input type="checkbox" checked="{% indoor_pet %}"/>Indoor Pet</div>
@@ -62,7 +62,16 @@ $(function() {
       pet_id: "{{=pet_id}}",
       list_o_pets: "",
       loading: true,
-      search_done: false
+      search_done: false,
+      house_trained: false,
+      kid_friendly: false,
+      pet_friendly: false,
+      outdoor_pet: false,
+      indoor_pet: false,
+      frequent_exercise: false,
+      infrequent_exercise: false,
+      young_pet: false,
+      older_pet: false
     },
   });
 
@@ -82,19 +91,37 @@ $(function() {
   }
 
 MAIN.on('search', function(e) {
+    user_selection = [];
+    if(($("#line_check").house_trained) == true){
+        user_selection.push(house_trained);
+    }
+    if($("#kid_friendly") == true){
+        user_selection.push(kid_friendly);
+    }
+    if($("#pet_friendly") == true){
+        user_selection.push(pet_friendly);
+    }
+    if($("#outdoor_pet") == true){
+        user_selection.push(outdoor_pet);
+    }
+    if($("#indoor_pet") == true){
+        user_selection.push(indoor_pet);
+    }
+    if($("#frequent_exercise") == true){
+        user_selection.push(frequent_exercise);
+    }
+    if($("#infrequent_exercise") == true){
+        user_selection.push(infrequent_exercise);
+    }
+    if($("#young_pet") == true){
+        user_selection.push(young_pet);
+    }
+    if($("#older_pet") == true){
+        user_selection.push(older_pet);
+    }
      $.ajax({
        url: "{{=URL('default', 'get_pets')}}",
-
-              data: {
-                house_trained: MAIN.get('house_trained'),
-                kid_friendly: (MAIN.get('kid_friendly')),
-                pet_friendly: (MAIN.get('pet_friendly')),
-                outdoor_pet: (MAIN.get('outdoor_pet')),
-                indoor_pet: (MAIN.get('indoor_pet')),
-                frequent_exercise: (MAIN.get('frequent_exercise')),
-                young_pet: (MAIN.get('young_pet')),
-                older_pet: (MAIN.get('older_pet'))
-              },
+              data: {user_selection: user_selection },
        method: "POST",
        success: function(data) {
          MAIN.set('loading', false);
