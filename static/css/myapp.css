@@ -2,3 +2,36 @@
 .colorful {
   color: #bb8833;
 }
+
+div.colorful{
+  color: #739001;
+}
+
+div.mydiv {
+   color: #FF0000;
+   line-height: 120%;
+  #repeat{
+     font-weight: italic;
+  }
+}
+
+div.search{
+   background-color: #CCFFFF;
+   padding: 20px;
+   margin: 30px;
+   -moz-border-radius: 40px;
+   -webkit-border-radius: 40px;
+   border-radius: 40px;
+   border: 3px solid #111111;
+   box-shadow(rgba(#111, 0.5) 0 4px 10px 2px);
+   display: inline-block;
+}
+
+div.petsearch{
+   background-color: #04B469;
+   padding: 10px;
+   margin: 15px;
+   -moz-border-radius: 20px;
+   -webkit-border-radius: 20px;
+   border-radius: 20px;
+}
