@@ -28,12 +28,13 @@ def addpet():
     form = SQLFORM(db.pets)
 
     if form.process().accepted:
-       response.flash = 'A new pet has been added.'
-       redirect(URL('default', 'index'))
+       session.flash = 'A new pet has been added.'
+       redirect(URL('index'))
     elif form.errors:
-       response.flash = 'Please fix up your form.'
+       session.flash = 'Please fix up your form.'
+       redirect(URL('addpet'))
     else:
-       response.flash = 'Please fill out all that is necessary.'
+       session.flash = 'Please fill out all that is necessary.'
     return dict(form=form)
 
 
