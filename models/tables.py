@@ -20,6 +20,3 @@ db.define_table('pets',
 
 db.pets.posted.readable = db.pets.posted.writable = False
 db.pets.posted.default = datetime.utcnow()
-
-#stream = open(filename, 'rb')
-#db.pets.insert(image=db.pets.pet_image.store(stream, filename))

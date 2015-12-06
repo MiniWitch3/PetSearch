@@ -1,6 +1,7 @@
 {{extend 'layout.html'}}
 
 
+
 <div class="User">
     {{if auth.user_id is None:}}
         {{=A('Sign Up', _class='btn btn-danger', _href=URL('default', 'user', args=['register']))}}
@@ -73,7 +74,6 @@ $(function() {
       search_done: false
     },
   });
-
   // http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
   function generateUUID(){
     var d = new Date().getTime();
@@ -87,7 +87,6 @@ $(function() {
     });
     return uuid;
   }
-
 MAIN.on('search', function(e) {
      $.ajax({
        url: "{{=URL('default', 'get_pets')}}",

@@ -12,8 +12,6 @@ def index():
 def get_items():
     #ASK TA ABOUT THIS
     pet_list = db.pets.select(
-        db.pets.Cat_or_Dog == request.vars.get(Cat_or_Dog) &
-        db.pets.gender == request.vars.get(gender) &
         db.pets.house_trained == request.vars.get(house_trained) &
         db.pets.kid_friendly == request.vars.get(kid_friendly) &
         db.pets.pet_friendly == request.vars.get(pet_friendly) &
@@ -25,7 +23,6 @@ def get_items():
     )
     return dict(pet_list=pet_list)
 
-@auth.requires_signature
 def addpet():
     form = SQLFORM(db.pets)
     if form.process().accepted:
