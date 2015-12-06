@@ -1,7 +1,11 @@
 {{left_sidebar_enabled,right_sidebar_enabled=False,('message' in globals())}}
 {{extend 'layout.html'}}
 
-<div id="target"></div>
+<div class="pet_list">
+    <div id="target"></div>
+</div>
+
+<h2>Learn more about these Pets!</h2>
 
 <div class="User">
     {{if auth.user_id is None:}}
@@ -14,16 +18,30 @@
 </div>
 
 <script id="template" type="text/ractive">
-
-</script>
-
-<h2>Learn more about these Pets!</h2>
+   <table>
+     <tbody>
+         <tr class="search_form">
+           <td class="line_check"><input type="checkbox" checked="{% house_trained %}"/></td> House trained <br>
+            <td class="line_check"><input type="checkbox" checked="{% kid_friendly %}"/></td> Kid friendly <br>
+            <td class="line_check"><input type="checkbox" checked="{% pet_friendly %}"/></td> Pet friendly <br>
+            <td class="line_check"><input type="checkbox" checked="{% outdoor_pet %}"/></td> Outdoor pet <br>
+            <td class="line_check"><input type="checkbox" checked="{% indoor_pet %}"/></td> Indoor pet <br>
+            <td class="line_check"><input type="checkbox" checked="{% frequent_exercise %}"/></td> Frequent exercise <br>
+            <td class="line_check"><input type="checkbox" checked="{% infrequent_exercise %}"/></td> Infrequent exercise <br>
+            <td class="line_check"><input type="checkbox" checked="{% young_pet %}"/></td> Young pet <br>
+            <td class="line_check"><input type="checkbox" checked="{% older_pet %}"/></td> Older pet <br>
+          </tr>
+     </tbody>
+   </table>
+<input class="btn btn-primary" type="submit" value="Submit" on-click="do_search"/></div>
 
 {% #if loading %}
   <div id="load_spinner">
     <i class="fa fa-spinner fa-pulse fa-5x"></i>
   </div>
 {% /if %}
+
+</script>
 
 <script>
 $(function() {
