@@ -1,66 +1,73 @@
-{{left_sidebar_enabled,right_sidebar_enabled=False,('message' in globals())}}
 {{extend 'layout.html'}}
 
-<div class="pet_list">
-    <div id="target"></div>
-</div>
 
-<h2>Learn more about these Pets!</h2>
 
 <div class="User">
     {{if auth.user_id is None:}}
         {{=A('Sign Up', _class='btn btn-danger', _href=URL('default', 'user', args=['register']))}}
 		{{=A('Sign In', _class='btn btn-success', _style='margin-left: 10px', _href=URL('default', 'user', args=['login']))}}
 	{{else:}}
-
+        {{=A('New Pet', _class='btn btn-success', _href=URL('default', 'addpet'))}}
     {{pass}}
-
 </div>
 
+<div id="target"></div>
+
+
+
 <script id="template" type="text/ractive">
-   <table>
-     <tbody>
-         <tr class="search_form">
-           <td class="line_check"><input type="checkbox" checked="{% house_trained %}"/></td> House trained <br>
-            <td class="line_check"><input type="checkbox" checked="{% kid_friendly %}"/></td> Kid friendly <br>
-            <td class="line_check"><input type="checkbox" checked="{% pet_friendly %}"/></td> Pet friendly <br>
-            <td class="line_check"><input type="checkbox" checked="{% outdoor_pet %}"/></td> Outdoor pet <br>
-            <td class="line_check"><input type="checkbox" checked="{% indoor_pet %}"/></td> Indoor pet <br>
-            <td class="line_check"><input type="checkbox" checked="{% frequent_exercise %}"/></td> Frequent exercise <br>
-            <td class="line_check"><input type="checkbox" checked="{% infrequent_exercise %}"/></td> Infrequent exercise <br>
-            <td class="line_check"><input type="checkbox" checked="{% young_pet %}"/></td> Young pet <br>
-            <td class="line_check"><input type="checkbox" checked="{% older_pet %}"/></td> Older pet <br>
-          </tr>
-     </tbody>
-   </table>
-<input class="btn btn-primary" type="submit" value="Submit" on-click="do_search"/></div>
+
+<div id="new_msg">
+<div class="line_check"><input type="checkbox" checked="{% house_trained %}"/>House Trained</div>
+<div class="line_check"><input type="checkbox" checked="{% kid_friendly %}"/>Kid Friendly</div>
+<div class="line_check"><input type="checkbox" checked="{% pet_friendly %}"/>Pet Friendly</div>
+<div class="line_check"><input type="checkbox" checked="{% outdoor_pet %}"/>Outdoor Pet</div>
+<div class="line_check"><input type="checkbox" checked="{% indoor_pet %}"/>Indoor Pet</div>
+<div class="line_check"><input type="checkbox" checked="{% frequent_exercise %}"/>Frequent Exercise </div>
+<div class="line_check"><input type="checkbox" checked="{% infrequent_exercise %}"/>Infrequent Exercise</div>
+<div class="line_check"><input type="checkbox" checked="{% young_pet %}"/>Young Pet</div>
+<div class="line_check"><input type="checkbox" checked="{% older_pet %}"/>Older Pet</div>
+<input class="btn btn-primary" type="submit" value="Submit" on-click="search"/>
+</div>
+
+{% #if search_done == true %}
+ {% #pet_dict:pet_id %}
+       <h2 class="pet_name">{% name %}</h2>
+       <div class="pet_image">{% pet_image %}</div>
+       <div class="date_posted">{% posted %}</div>
+ {% /pet_dict %}
+{% /if %}
+
 
 {% #if loading %}
   <div id="load_spinner">
-    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+    <i class="fa fa-spinner fa-pulse fa-4x"></i>
   </div>
 {% /if %}
 
 </script>
 
 <script>
+
 $(function() {
 
-   var.MAIN = new Ractive({
-      el: '#target',
-      template: '#template',
-      delimiters: ['{%', '%}'],
-      tripleDelimiters: ['{%%', '%%}'],
-      data: {
-        pet_dict: {},
-        pet_id: "{{=pet_id}}",
-        list_o_pets: "",
-        loading: true
-      },
-   });
+  // Ractive object
+  var MAIN = new Ractive({
+    el: '#target',
+    template: '#template',
+    delimiters: ['{%', '%}'],
+    tripleDelimiters: ['{%%', '%%}'],
+    data: {
+      pet_dict: {},
+      pet_id: "{{=pet_id}}",
+      list_o_pets: "",
+      loading: true,
+      search_done: false
+    },
+  });
 
 
-   // http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
+  // http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
   function generateUUID(){
     var d = new Date().getTime();
     if(window.performance && typeof window.performance.now === "function"){
@@ -74,16 +81,31 @@ $(function() {
     return uuid;
   }
 
+MAIN.on('search', function(e) {
+     $.ajax({
+       url: "{{=URL('default', 'get_pets')}}",
 
-   //add pet profile
-   MAIN.on("add_pet", function(e){
+              data: {
+                house_trained: MAIN.get('house_trained'),
+                kid_friendly: (MAIN.get('kid_friendly')),
+                pet_friendly: (MAIN.get('pet_friendly')),
+                outdoor_pet: (MAIN.get('outdoor_pet')),
+                indoor_pet: (MAIN.get('indoor_pet')),
+                frequent_exercise: (MAIN.get('frequent_exercise')),
+                young_pet: (MAIN.get('young_pet')),
+                older_pet: (MAIN.get('older_pet'))
+              },
+       method: "POST",
+       success: function(data) {
+         MAIN.set('loading', false);
+         MAIN.set('search_done', true);
+         MAIN.set('pet_dict', data['pet_dict']);
+       },
+       fail: function() {
+         $("#server_error").show();
+       }
+     });
+});
 
-   });
-
-   //links to corresponding pet profiles
-   MAIN.on("goto_pet", function(e){
-      var el = $(e.node);
-      var pet_id = el.data("");
-      window.location = "{{=URL('default', 'pets')}}/" + pet_id;
 });
 </script>
