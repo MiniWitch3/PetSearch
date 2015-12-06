@@ -8,27 +8,32 @@
         {{=A('Sign Up', _class='btn btn-danger', _href=URL('default', 'user', args=['register']))}}
 		{{=A('Sign In', _class='btn btn-success', _style='margin-left: 10px', _href=URL('default', 'user', args=['login']))}}
 	{{else:}}
-        {{=A('New Pet', _class='btn btn-success', _href=URL('default', 'admin'))}}
+        {{=A('New Pet', _class='btn btn-success', _href=URL('default', 'addpet'))}}
     {{pass}}
 </div>
 
-<td class="line_check"><input type="checkbox" checked="{% request.vars.house_trained %}"/></td> House Trained <br>
-<td class="line_check"><input type="checkbox" checked="{% request.vars.kid_friendly %}"/></td> Kid Friendly <br>
-<td class="line_check"><input type="checkbox" checked="{% request.vars.pet_friendly %}"/></td> Pet Friendly <br>
-<td class="line_check"><input type="checkbox" checked="{% request.vars.outdoor_pet %}"/></td> Outdoor Pet <br>
-<td class="line_check"><input type="checkbox" checked="{% request.vars.indoor_pet %}"/></td> Indoor Pet <br>
-<td class="line_check"><input type="checkbox" checked="{% request.vars.frequent_exercise %}"/></td> Frequent Exercise <br>
-<td class="line_check"><input type="checkbox" checked="{% request.vars.infrequent_exercise %}"/></td> Infrequent Exercise <br>
-<td class="line_check"><input type="checkbox" checked="{% request.vars.young_pet %}"/></td> Young Pet <br>
-<td class="line_check"><input type="checkbox" checked="{% request.vars.older_pet %}"/></td> Older Pet <br>
-
+<div class="search">
+    <td class="line_check"><input type="checkbox" unchecked="{% request.vars.house_trained %}"/></td> House Trained <br>
+    <td class="line_check"><input type="checkbox" unchecked="{% request.vars.kid_friendly %}"/></td> Kid Friendly <br>
+    <td class="line_check"><input type="checkbox" unchecked="{% request.vars.pet_friendly %}"/></td> Pet Friendly <br>
+    <td class="line_check"><input type="checkbox" unchecked="{% request.vars.outdoor_pet %}"/></td> Outdoor Pet <br>
+    <td class="line_check"><input type="checkbox" unchecked="{% request.vars.indoor_pet %}"/></td> Indoor Pet <br>
+    <td class="line_check"><input type="checkbox" unchecked="{% request.vars.frequent_exercise %}"/></td> Frequent Exercise <br>
+    <td class="line_check"><input type="checkbox" unchecked="{% request.vars.infrequent_exercise %}"/></td> Infrequent Exercise <br>
+    <td class="line_check"><input type="checkbox" unchecked="{% request.vars.young_pet %}"/></td> Young Pet <br>
+    <td class="line_check"><input type="checkbox" unchecked="{% request.vars.older_pet %}"/></td> Older Pet <br>
+    {{=A('Submit', _class='btn btn-primary')}}
+</div>
 
 <script id="template" type="text/ractive">
 
 </script>
 
 <h2>Learn more about these Pets!</h2>
+<div class="petsearch">
 
+
+</div>
 {% #if loading %}
   <div id="load_spinner">
     <i class="fa fa-spinner fa-pulse fa-5x"></i>

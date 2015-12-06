@@ -24,17 +24,16 @@ def get_items():
     )
     return dict(pet_list=pet_list)
 
-def pet_form():
+def addpet():
     form = SQLFORM(db.pets)
 
     if form.process().accepted:
        response.flash = 'A new pet has been added.'
+       redirect(URL('default', 'index'))
     elif form.errors:
        response.flash = 'Please fix up your form.'
     else:
        response.flash = 'Please fill out all that is necessary.'
-    return dict(form=form)
-
     return dict(form=form)
 
 
