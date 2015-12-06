@@ -26,7 +26,6 @@ def get_items():
 
 def addpet():
     form = SQLFORM(db.pets)
-
     if form.process().accepted:
        session.flash = 'A new pet has been added.'
        redirect(URL('index'))
@@ -36,6 +35,12 @@ def addpet():
     else:
        session.flash = 'Please fill out all that is necessary.'
     return dict(form=form)
+
+
+@auth.requires_signature
+def delete():
+    db(db.pets.id == request.args(0)).delete()
+    redirect(URL('default', 'index'))
 
 
 def user():
