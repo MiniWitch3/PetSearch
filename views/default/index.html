@@ -1,7 +1,5 @@
-{{left_sidebar_enabled,right_sidebar_enabled=False,('message' in globals())}}
 {{extend 'layout.html'}}
 
-<div id="target"></div>
 
 <div class="User">
     {{if auth.user_id is None:}}
@@ -12,60 +10,71 @@
     {{pass}}
 </div>
 
-<div class="search">
-    <td class="line_check"><input type="checkbox" unchecked="{% request.vars.house_trained %}"/></td> House Trained <br>
-    <td class="line_check"><input type="checkbox" unchecked="{% request.vars.kid_friendly %}"/></td> Kid Friendly <br>
-    <td class="line_check"><input type="checkbox" unchecked="{% request.vars.pet_friendly %}"/></td> Pet Friendly <br>
-    <td class="line_check"><input type="checkbox" unchecked="{% request.vars.outdoor_pet %}"/></td> Outdoor Pet <br>
-    <td class="line_check"><input type="checkbox" unchecked="{% request.vars.indoor_pet %}"/></td> Indoor Pet <br>
-    <td class="line_check"><input type="checkbox" unchecked="{% request.vars.frequent_exercise %}"/></td> Frequent Exercise <br>
-    <td class="line_check"><input type="checkbox" unchecked="{% request.vars.infrequent_exercise %}"/></td> Infrequent Exercise <br>
-    <td class="line_check"><input type="checkbox" unchecked="{% request.vars.young_pet %}"/></td> Young Pet <br>
-    <td class="line_check"><input type="checkbox" unchecked="{% request.vars.older_pet %}"/></td> Older Pet <br>
-    {{=A('Submit', _class='btn btn-primary')}}
-</div>
+<div id="target"></div>
+
+
 
 <script id="template" type="text/ractive">
 
-</script>
-
-<h2>Learn more about these Pets!</h2>
+<div class="search">
+<div id="new_msg">
+<select>
+  <option value="Cat">Cat</option>
+  <option value="Dog">Dog</option>
+</select>
+<select>
+  <option value="Male">Male</option>
+  <option value="Female">Female</option>
+</select>
+<div class="line_check"><input type="checkbox" unchecked="{% house_trained %}"/>House Trained</div>
+<div class="line_check"><input type="checkbox" unchecked="{% kid_friendly %}"/>Kid Friendly</div>
+<div class="line_check"><input type="checkbox" unchecked="{% pet_friendly %}"/>Pet Friendly</div>
+<div class="line_check"><input type="checkbox" unchecked="{% outdoor_pet %}"/>Outdoor Pet</div>
+<div class="line_check"><input type="checkbox" unchecked="{% indoor_pet %}"/>Indoor Pet</div>
+<div class="line_check"><input type="checkbox" unchecked="{% frequent_exercise %}"/>Frequent Exercise </div>
+<div class="line_check"><input type="checkbox" unchecked="{% young_pet %}"/>Young Pet</div>
+<div class="line_check"><input type="checkbox" unchecked="{% older_pet %}"/>Older Pet</div>
+<input class="btn btn-primary" type="submit" value="Submit" on-click="search"/>
+</div>
+</div>
 
 {% #if search_done == true %}
  {% #pet_dict:pet_id %}
-    <div class="petsearch">
+       <div class="petsearch">
        <h2 class="pet_name">{% name %}</h2>
        <div class="pet_image">{% pet_image %}</div>
        <div class="date_posted">{% posted %}</div>
-    </div>
+       </div>
  {% /pet_dict %}
 {% /if %}
 
+
 {% #if loading %}
   <div id="load_spinner">
-    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+    <i class="fa fa-spinner fa-pulse fa-4x"></i>
   </div>
 {% /if %}
 
+</script>
+
 <script>
 $(function() {
+  // Ractive object
+  var MAIN = new Ractive({
+    el: '#target',
+    template: '#template',
+    delimiters: ['{%', '%}'],
+    tripleDelimiters: ['{%%', '%%}'],
+    data: {
+      pet_dict: {},
+      pet_id: "{{=pet_id}}",
+      list_o_pets: "",
+      loading: true,
+      search_done: false
+    },
+  });
 
-   var.MAIN = new Ractive({
-      el: '#target',
-      template: '#template',
-      delimiters: ['{%', '%}'],
-      tripleDelimiters: ['{%%', '%%}'],
-      data: {
-        pet_dict: {},
-        pet_id: "{{=pet_id}}",
-        list_o_pets: "",
-        loading: true,
-        search_done: false
-      },
-   });
-
-
-   // http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
+  // http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
   function generateUUID(){
     var d = new Date().getTime();
     if(window.performance && typeof window.performance.now === "function"){
@@ -79,13 +88,13 @@ $(function() {
     return uuid;
   }
 
-
-   //add pet profile
-   MAIN.on('search', function(e) {
+MAIN.on('search', function(e) {
      $.ajax({
        url: "{{=URL('default', 'get_pets')}}",
               data: {
-                house_trained: MAIN.get('house_trained'),
+                Cat_or_Dog: (MAIN.get('Cat_or_Dog')),
+                gender: (MAIN.get('gender')),
+                house_trained: (MAIN.get('house_trained')),
                 kid_friendly: (MAIN.get('kid_friendly')),
                 pet_friendly: (MAIN.get('pet_friendly')),
                 outdoor_pet: (MAIN.get('outdoor_pet')),
@@ -104,12 +113,6 @@ $(function() {
          $("#server_error").show();
        }
      });
-   });
-
-   //links to corresponding pet profiles
-   MAIN.on("goto_pet", function(e){
-      var el = $(e.node);
-      var pet_id = el.data("");
-      window.location = "{{=URL('default', 'pets')}}/" + pet_id;
-   });
+});
+});
 </script>

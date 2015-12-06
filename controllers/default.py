@@ -12,18 +12,20 @@ def index():
 def get_items():
     #ASK TA ABOUT THIS
     pet_list = db.pets.select(
+        db.pets.Cat_or_Dog == request.vars.get(Cat_or_Dog) &
+        db.pets.gender == request.vars.get(gender) &
         db.pets.house_trained == request.vars.get(house_trained) &
         db.pets.kid_friendly == request.vars.get(kid_friendly) &
         db.pets.pet_friendly == request.vars.get(pet_friendly) &
         db.pets.outdoor_pet == request.vars.get(outdoor_pet) &
         db.pets.indoor_pet == request.vars.get(indoor_pet) &
         db.pets.frequent_exercise == request.vars.get(frequent_exercise) &
-        db.pets.infrequent_exercise == request.vars.get(infrequent_exercise) &
         db.pets.young_pet == request.vars.get(young_pet) &
         db.pets.older_pet == request.vars.get(older_pet)
     )
     return dict(pet_list=pet_list)
 
+@auth.requires_signature
 def addpet():
     form = SQLFORM(db.pets)
     if form.process().accepted:
@@ -35,6 +37,9 @@ def addpet():
     else:
        session.flash = 'Please fill out all that is necessary.'
     return dict(form=form)
+
+#@auth.requires_signature
+#def edit():
 
 
 @auth.requires_signature
