@@ -30,10 +30,17 @@
 </script>
 
 <h2>Learn more about these Pets!</h2>
-<div class="petsearch">
 
+{% #if search_done == true %}
+ {% #pet_dict:pet_id %}
+    <div class="petsearch">
+       <h2 class="pet_name">{% name %}</h2>
+       <div class="pet_image">{% pet_image %}</div>
+       <div class="date_posted">{% posted %}</div>
+    </div>
+ {% /pet_dict %}
+{% /if %}
 
-</div>
 {% #if loading %}
   <div id="load_spinner">
     <i class="fa fa-spinner fa-pulse fa-5x"></i>
@@ -52,7 +59,8 @@ $(function() {
         pet_dict: {},
         pet_id: "{{=pet_id}}",
         list_o_pets: "",
-        loading: true
+        loading: true,
+        search_done: false
       },
    });
 
@@ -73,8 +81,29 @@ $(function() {
 
 
    //add pet profile
-   MAIN.on("add_pet", function(e){
-
+   MAIN.on('search', function(e) {
+     $.ajax({
+       url: "{{=URL('default', 'get_pets')}}",
+              data: {
+                house_trained: MAIN.get('house_trained'),
+                kid_friendly: (MAIN.get('kid_friendly')),
+                pet_friendly: (MAIN.get('pet_friendly')),
+                outdoor_pet: (MAIN.get('outdoor_pet')),
+                indoor_pet: (MAIN.get('indoor_pet')),
+                frequent_exercise: (MAIN.get('frequent_exercise')),
+                young_pet: (MAIN.get('young_pet')),
+                older_pet: (MAIN.get('older_pet'))
+              },
+       method: "POST",
+       success: function(data) {
+         MAIN.set('loading', false);
+         MAIN.set('search_done', true);
+         MAIN.set('pet_dict', data['pet_dict']);
+       },
+       fail: function() {
+         $("#server_error").show();
+       }
+     });
    });
 
    //links to corresponding pet profiles
@@ -82,5 +111,5 @@ $(function() {
       var el = $(e.node);
       var pet_id = el.data("");
       window.location = "{{=URL('default', 'pets')}}/" + pet_id;
-});
+   });
 </script>
