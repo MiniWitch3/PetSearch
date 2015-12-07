@@ -11,20 +11,19 @@ def index():
 
 def get_pets():
     condition_list = []
+    rows = db().select(db.pets.ALL)
     user_selection = request.vars.get('user_selection[]') or request.vars.get('user_selection') or []
     if isinstance(user_selection, (str, unicode)):
         user_selection = [user_selection]
     user_selection = [int(i) for i in user_selection]
 
     for j in user_selection[0:]:
-        condition_list.append((db.pets.user_selection[j], True))
+        for row in db().select(db.pets.user_selection[j]):
+            if row.user_selection[j] == True:
+                condition_list.append(row.user_selection[j])
 
-    l, r = condition_list[0]
-    q = (l == r)
-    for l, r in condition_list[0:]:
-        q = q & (l == r)
-    pet_dict = db(q).select()
-
+    query = reduce(lambda a,b:(a&b),condition_list)
+    pet_dict = query.select()
 
     #pet_dict = db((db.pets.house_trained == request.vars.house_trained) &
     #             (db.pets.kid_friendly == request.vars.kid_friendly) &
