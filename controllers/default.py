@@ -16,9 +16,18 @@ def get_pets():
     if isinstance(user_selection, (str, unicode)):
         user_selection = [user_selection]
 
-
     for j in user_selection[0:]:
-        if j == "house_trained": qset=qset(db.pets.id > 0)
+        if j == "house_trained": qset=qset(db.pets.house_trained == True)
+        if j == "kid_friendly": qset=qset(db.pets.kid_friendly == True)
+        if j == "indoor_pet": qset=qset(db.pets.indoor_pet == True)
+        if j == "outdoor_pet": qset=qset(db.pets.outdoor_pet == True)
+        if j == "frequent_exercise": qset=qset(db.pets.frequent_exercise)
+        if j == "infrequent_exercise": qset=qset(db.pets.infrequent_exercise == True)
+        if j == "young_pet": qset=qset(db.pets.young_pet == True)
+        if j == "older_pet": qset=qset(db.pets.older_pet == True)
+        if j == "pet_friendly": qset=qset(db.pets.pet_friendly == True)
+
+    #query = reduce(lambda a,b:(a&b),condition_list)
     pet_dict = qset.select()
 
     #pet_dict = db((db.pets.house_trained == request.vars.house_trained) &
