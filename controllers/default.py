@@ -11,20 +11,15 @@ def index():
 
 def get_pets():
     condition_list = []
+    qset = db()
     user_selection = request.vars.get('user_selection[]') or request.vars.get('user_selection') or []
     if isinstance(user_selection, (str, unicode)):
         user_selection = [user_selection]
-    user_selection = [int(i) for i in user_selection]
+
 
     for j in user_selection[0:]:
-        condition_list.append((db.pets.user_selection[j], True))
-
-    l, r = condition_list[0]
-    q = (l == r)
-    for l, r in condition_list[0:]:
-        q = q & (l == r)
-    pet_dict = db(q).select()
-
+        if j == "house_trained": qset=qset(db.pets.id > 0)
+    pet_dict = qset.select()
 
     #pet_dict = db((db.pets.house_trained == request.vars.house_trained) &
     #             (db.pets.kid_friendly == request.vars.kid_friendly) &
@@ -38,17 +33,32 @@ def get_pets():
 def addpet():
     form = SQLFORM(db.pets)
     if form.process().accepted:
-       session.flash = 'A new pet has been added.'
+       session.flash = T('A new pet has been added.')
        redirect(URL('index'))
     else:
-       session.flash = 'Please fill out all that is necessary.'
+       session.flash = T('Please fill out all that is necessary.')
     return dict(form=form)
 
+@auth.requires_signature
+def edit():
+    pets = db.pets(request.args(0))
+    if pets is None:
+        session.flash = T('This pet is unavailable.')
+        redirect(URL('index'))
+    if form.process().accepted:
+        session.flash = T('The pet profile has been updated.')
+        redirect(URL('pets', args=[pets.id]))
+    return dict(form=form)
 
 @auth.requires_signature
 def delete():
-    db(db.pets.id == request.args(0)).delete()
-    redirect(URL('default', 'index'))
+    deleted = db.pets(request.args(0))
+    if deleted is None:
+        session.flash = T('This pet is unavailable.')
+        redirect(URL('index'))
+    db(db.pets.id == deleted.id).delete()
+    session.flash = T('The pet profile has been removed.')
+    redirect(URL('index'))
 
 def user():
     """

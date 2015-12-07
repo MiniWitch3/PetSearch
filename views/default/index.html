@@ -16,6 +16,7 @@
 <script id="template" type="text/ractive">
 
 <div id="new_msg">
+<div class="search">
 <div id="line_check"><input type="checkbox" checked="{% house_trained %}"/>House Trained</div>
 <div id="line_check"><input type="checkbox" checked="{% kid_friendly %}"/>Kid Friendly</div>
 <div class="line_check"><input type="checkbox" checked="{% pet_friendly %}"/>Pet Friendly</div>
@@ -27,12 +28,15 @@
 <div class="line_check"><input type="checkbox" checked="{% older_pet %}"/>Older Pet</div>
 <input class="btn btn-primary" type="submit" value="Submit" on-click="search"/>
 </div>
+</div>
 
 {% #if search_done == true %}
  {% #pet_dict:pet_id %}
-       <h2 class="pet_name">{% name %}</h2>
+       <div class="petsearch">
+       <div class="Pets" data-petid="{% pet_id %}" on-click="goto_pet" ><h2 class="pet_name">{% name %}</h2></div>
        <div class="pet_image">{% pet_image %}</div>
        <div class="date_posted">{% posted %}</div>
+       </div>
  {% /pet_dict %}
 {% /if %}
 
@@ -70,6 +74,13 @@ $(function() {
       older_pet: false
     },
   });
+
+  MAIN.on("goto_pet", function(e) {
+    var el = $(e.node);
+    var pet_id = el.data("petid");
+    window.location = "{{=URL('default', 'pets')}}/" + pet_id;
+  });
+
   // http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
   function generateUUID(){
     var d = new Date().getTime();
@@ -83,6 +94,7 @@ $(function() {
     });
     return uuid;
   }
+
 MAIN.on('search', function(e) {
     user_selection = [];
     if(($("#line_check").house_trained) == true){
