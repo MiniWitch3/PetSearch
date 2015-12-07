@@ -26,6 +26,11 @@ def get_pets():
         if j == "young_pet": qset=qset(db.pets.young_pet == True)
         if j == "older_pet": qset=qset(db.pets.older_pet == True)
         if j == "pet_friendly": qset=qset(db.pets.pet_friendly == True)
+        if j == "cat": qset=qset(db.pets.Cat_or_Dog == "Cat")
+        if j == "dog": qset=qset(db.pets.Cat_or_Dog == "Dog")
+        if j == "male": qset=qset(db.pets.gender == "Male")
+        if j == "female": qset=qset(db.pets.gender == "Female")
+
 
     #query = reduce(lambda a,b:(a&b),condition_list)
     pet_dict = qset.select()

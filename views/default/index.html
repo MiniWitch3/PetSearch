@@ -17,6 +17,17 @@
 
 <script id="template" type="text/ractive">
 
+<div class="drop_down">
+<select value="{% Cat_or_Dog %}">
+  <option value="cat">Cat</option>
+  <option value="dog">Dog</option>
+</select>
+<select value="{% gender %}">
+  <option value="male">Male</option>
+  <option value="female">Female</option>
+</select>
+</div>
+
 <div id="new_msg">
 <div id="line_check"><input type="checkbox" checked="{% house_trained %}"/>House Trained</div>
 <div id="line_check"><input type="checkbox" checked="{% kid_friendly %}"/>Kid Friendly</div>
@@ -69,7 +80,9 @@ $(function() {
       frequent_exercise: false,
       infrequent_exercise: false,
       young_pet: false,
-      older_pet: false
+      older_pet: false,
+      Cat_or_Dog: "cat",
+      gender: "male"
     },
   });
 
@@ -117,6 +130,19 @@ user_selection = [];
     if(MAIN.get("older_pet") == true){
         user_selection.push("older_pet");
     }
+    if(MAIN.get("Cat_or_Dog") == "dog"){
+        user_selection.push("dog");
+    }
+    if(MAIN.get("Cat_or_Dog") == "cat"){
+        user_selection.push("cat");
+    }
+    if(MAIN.get("gender") == "male"){
+        user_selection.push("male");
+    }
+    if(MAIN.get("gender") == "female"){
+        user_selection.push("female");
+    }
+
      $.ajax({
        url: "{{=URL('default', 'get_pets')}}",
               data: {user_selection: user_selection },
