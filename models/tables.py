@@ -14,6 +14,7 @@ db.define_table('pets',
                 Field("outdoor_pet", 'boolean'),
                 Field("indoor_pet", 'boolean'),
                 Field("frequent_exercise", 'boolean'),
+                Field("infrequent_exercise", 'boolean'),
                 Field("young_pet", 'boolean'),
                 Field("older_pet", 'boolean')
                 )

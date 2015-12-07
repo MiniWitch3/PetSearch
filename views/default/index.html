@@ -1,7 +1,5 @@
 {{extend 'layout.html'}}
 
-
-
 <div class="User">
     {{if auth.user_id is None:}}
         {{=A('Sign Up', _class='btn btn-danger', _href=URL('default', 'user', args=['register']))}}
@@ -17,35 +15,24 @@
 
 <script id="template" type="text/ractive">
 
-<div class="search">
 <div id="new_msg">
-<select>
-  <option value="Cat">Cat</option>
-  <option value="Dog">Dog</option>
-</select>
-<select>
-  <option value="Male">Male</option>
-  <option value="Female">Female</option>
-</select>
-<div class="line_check"><input type="checkbox" unchecked="{% house_trained %}"/>House Trained</div>
-<div class="line_check"><input type="checkbox" unchecked="{% kid_friendly %}"/>Kid Friendly</div>
-<div class="line_check"><input type="checkbox" unchecked="{% pet_friendly %}"/>Pet Friendly</div>
-<div class="line_check"><input type="checkbox" unchecked="{% outdoor_pet %}"/>Outdoor Pet</div>
-<div class="line_check"><input type="checkbox" unchecked="{% indoor_pet %}"/>Indoor Pet</div>
-<div class="line_check"><input type="checkbox" unchecked="{% frequent_exercise %}"/>Frequent Exercise </div>
-<div class="line_check"><input type="checkbox" unchecked="{% young_pet %}"/>Young Pet</div>
-<div class="line_check"><input type="checkbox" unchecked="{% older_pet %}"/>Older Pet</div>
+<div id="line_check"><input type="checkbox" checked="{% house_trained %}"/>House Trained</div>
+<div id="line_check"><input type="checkbox" checked="{% kid_friendly %}"/>Kid Friendly</div>
+<div class="line_check"><input type="checkbox" checked="{% pet_friendly %}"/>Pet Friendly</div>
+<div class="line_check"><input type="checkbox" checked="{% outdoor_pet %}"/>Outdoor Pet</div>
+<div class="line_check"><input type="checkbox" checked="{% indoor_pet %}"/>Indoor Pet</div>
+<div class="line_check"><input type="checkbox" checked="{% frequent_exercise %}"/>Frequent Exercise </div>
+<div class="line_check"><input type="checkbox" checked="{% infrequent_exercise %}"/>Infrequent Exercise</div>
+<div class="line_check"><input type="checkbox" checked="{% young_pet %}"/>Young Pet</div>
+<div class="line_check"><input type="checkbox" checked="{% older_pet %}"/>Older Pet</div>
 <input class="btn btn-primary" type="submit" value="Submit" on-click="search"/>
-</div>
 </div>
 
 {% #if search_done == true %}
  {% #pet_dict:pet_id %}
-       <div class="petsearch">
        <h2 class="pet_name">{% name %}</h2>
        <div class="pet_image">{% pet_image %}</div>
        <div class="date_posted">{% posted %}</div>
-       </div>
  {% /pet_dict %}
 {% /if %}
 
@@ -71,7 +58,16 @@ $(function() {
       pet_id: "{{=pet_id}}",
       list_o_pets: "",
       loading: true,
-      search_done: false
+      search_done: false,
+      house_trained: false,
+      kid_friendly: false,
+      pet_friendly: false,
+      outdoor_pet: false,
+      indoor_pet: false,
+      frequent_exercise: false,
+      infrequent_exercise: false,
+      young_pet: false,
+      older_pet: false
     },
   });
   // http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
@@ -88,20 +84,37 @@ $(function() {
     return uuid;
   }
 MAIN.on('search', function(e) {
+    user_selection = [];
+    if(($("#line_check").house_trained) == true){
+        user_selection.push(house_trained);
+    }
+    if($("#kid_friendly") == true){
+        user_selection.push(kid_friendly);
+    }
+    if($("#pet_friendly") == true){
+        user_selection.push(pet_friendly);
+    }
+    if($("#outdoor_pet") == true){
+        user_selection.push(outdoor_pet);
+    }
+    if($("#indoor_pet") == true){
+        user_selection.push(indoor_pet);
+    }
+    if($("#frequent_exercise") == true){
+        user_selection.push(frequent_exercise);
+    }
+    if($("#infrequent_exercise") == true){
+        user_selection.push(infrequent_exercise);
+    }
+    if($("#young_pet") == true){
+        user_selection.push(young_pet);
+    }
+    if($("#older_pet") == true){
+        user_selection.push(older_pet);
+    }
      $.ajax({
        url: "{{=URL('default', 'get_pets')}}",
-              data: {
-                Cat_or_Dog: (MAIN.get('Cat_or_Dog')),
-                gender: (MAIN.get('gender')),
-                house_trained: (MAIN.get('house_trained')),
-                kid_friendly: (MAIN.get('kid_friendly')),
-                pet_friendly: (MAIN.get('pet_friendly')),
-                outdoor_pet: (MAIN.get('outdoor_pet')),
-                indoor_pet: (MAIN.get('indoor_pet')),
-                frequent_exercise: (MAIN.get('frequent_exercise')),
-                young_pet: (MAIN.get('young_pet')),
-                older_pet: (MAIN.get('older_pet'))
-              },
+              data: {user_selection: user_selection },
        method: "POST",
        success: function(data) {
          MAIN.set('loading', false);
