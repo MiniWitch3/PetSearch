@@ -11,19 +11,15 @@ def index():
 
 def get_pets():
     condition_list = []
-    rows = db().select(db.pets.ALL)
+    qset = db()
     user_selection = request.vars.get('user_selection[]') or request.vars.get('user_selection') or []
     if isinstance(user_selection, (str, unicode)):
         user_selection = [user_selection]
-    user_selection = [int(i) for i in user_selection]
+
 
     for j in user_selection[0:]:
-        for row in db().select(db.pets.user_selection[j]):
-            if row.user_selection[j] == True:
-                condition_list.append(row.user_selection[j])
-
-    query = reduce(lambda a,b:(a&b),condition_list)
-    pet_dict = query.select()
+        if j == "house_trained": qset=qset(db.pets.id > 0)
+    pet_dict = qset.select()
 
     #pet_dict = db((db.pets.house_trained == request.vars.house_trained) &
     #             (db.pets.kid_friendly == request.vars.kid_friendly) &
@@ -32,7 +28,7 @@ def get_pets():
     #        (db.pets.infrequent_exercise == request.vars.infrequent_exercise) &
     #       (db.pets.young_pet == request.vars.young_pet) &
     #      (db.pets.older_pet == request.vars.older_pet)).select()
-    return dict(pet_dict=pet_dict)
+    return response.json(dict(pet_dict=pet_dict))
 
 def addpet():
     form = SQLFORM(db.pets)
