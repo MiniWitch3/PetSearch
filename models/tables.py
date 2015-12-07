@@ -1,4 +1,5 @@
 from datetime import datetime
+from gluon import utils as gluon_utils
 
 db.define_table('pets',
                 Field("name", requires = IS_NOT_EMPTY()),
@@ -6,6 +7,7 @@ db.define_table('pets',
                 Field("description", "text", requires = IS_NOT_EMPTY()),
                 Field("posted", 'datetime'),
                 Field("pet_image", 'upload'),
+                Field("pet_id", default=gluon_utils.web2py_uuid()),
                 Field("Cat_or_Dog", requires=IS_IN_SET(['Cat', 'Dog'])),
                 Field("gender", requires=IS_IN_SET(['Male', 'Female'])),
                 Field("house_trained", 'boolean'),
