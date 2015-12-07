@@ -16,9 +16,18 @@ def get_pets():
     if isinstance(user_selection, (str, unicode)):
         user_selection = [user_selection]
 
-
     for j in user_selection[0:]:
-        if j == "house_trained": qset=qset(db.pets.id > 0)
+        if j == "house_trained": qset=qset(db.pets.house_trained == True)
+        if j == "kid_friendly": qset=qset(db.pets.kid_friendly == True)
+        if j == "indoor_pet": qset=qset(db.pets.indoor_pet == True)
+        if j == "outdoor_pet": qset=qset(db.pets.outdoor_pet == True)
+        if j == "frequent_exercise": qset=qset(db.pets.frequent_exercise)
+        if j == "infrequent_exercise": qset=qset(db.pets.infrequent_exercise == True)
+        if j == "young_pet": qset=qset(db.pets.young_pet == True)
+        if j == "older_pet": qset=qset(db.pets.older_pet == True)
+        if j == "pet_friendly": qset=qset(db.pets.pet_friendly == True)
+
+    #query = reduce(lambda a,b:(a&b),condition_list)
     pet_dict = qset.select()
 
     #pet_dict = db((db.pets.house_trained == request.vars.house_trained) &
@@ -28,15 +37,15 @@ def get_pets():
     #        (db.pets.infrequent_exercise == request.vars.infrequent_exercise) &
     #       (db.pets.young_pet == request.vars.young_pet) &
     #      (db.pets.older_pet == request.vars.older_pet)).select()
-    return dict(pet_dict=pet_dict)
+    return response.json(dict(pet_dict=pet_dict))
 
 def addpet():
     form = SQLFORM(db.pets)
     if form.process().accepted:
-       session.flash = T('A new pet has been added.')
+       session.flash = 'A new pet has been added.'
        redirect(URL('index'))
     else:
-       session.flash = T('Please fill out all that is necessary.')
+       session.flash = 'Please fill out all that is necessary.'
     return dict(form=form)
 
 @auth.requires_signature
@@ -96,4 +105,3 @@ def call():
     supports xml, json, xmlrpc, jsonrpc, amfrpc, rss, csv
     """
     return service()
-
