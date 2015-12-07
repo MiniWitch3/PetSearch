@@ -17,6 +17,14 @@
 
 <div id="new_msg">
 <div class="search">
+<select>
+  <option value="Cat">Cat</option>
+  <option value="Dog">Dog</option>
+</select>
+<select>
+  <option value="Male">Male</option>
+  <option value="Female">Female</option>
+</select>
 <div id="line_check"><input type="checkbox" checked="{% house_trained %}"/>House Trained</div>
 <div id="line_check"><input type="checkbox" checked="{% kid_friendly %}"/>Kid Friendly</div>
 <div class="line_check"><input type="checkbox" checked="{% pet_friendly %}"/>Pet Friendly</div>
@@ -33,7 +41,7 @@
 {% #if search_done == true %}
  {% #pet_dict:pet_id %}
        <div class="petsearch">
-       <div class="Pets" data-petid="{% pet_id %}" on-click="goto_pet" ><h2 class="pet_name">{% name %}</h2></div>
+       <div class="Boards" data-petid="{% pet_id %}" on-click="goto_pet" ><h2 class="pet_name">{% name %}</h2></div>
        <div class="pet_image">{% pet_image %}</div>
        <div class="date_posted">{% posted %}</div>
        </div>
@@ -75,6 +83,7 @@ $(function() {
     },
   });
 
+  //links the corresponding board of posts
   MAIN.on("goto_pet", function(e) {
     var el = $(e.node);
     var pet_id = el.data("petid");
@@ -94,7 +103,6 @@ $(function() {
     });
     return uuid;
   }
-
 MAIN.on('search', function(e) {
     user_selection = [];
     if(($("#line_check").house_trained) == true){
