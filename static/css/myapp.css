@@ -50,17 +50,23 @@ div.petsearch{
 }
 
 .select_pet{
-    margin-top: -7%;
     background-color: lightblue;
-    padding: 2%;
-    text-align: center;
+    padding: 5%;
+    margin-top: -7%;
 }
 
-single_pet_button{
-    margin-top: -2%;
-    background-color: lightblue;
-    float: right;
-    position: absolute;
+.pet_picture{
+  /*   display: inline; */
+}
+.pet_wrapper{
+    display:inline
+}
+
+.pet_description{
+    margin-left: 40%;
+    background-color: white;
+    padding: 2%;
+    display: inline;
 }
 
 
