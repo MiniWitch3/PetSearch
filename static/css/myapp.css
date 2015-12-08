@@ -48,3 +48,23 @@ div.petsearch{
 .User{
     margin-top: 2%;
 }
+
+.select_pet{
+    background-color: lightblue;
+    padding: 5%;
+    margin-top: -7%;
+}
+
+.pet_picture{
+  /*   display: inline; */
+}
+.pet_wrapper{
+    display:inline
+}
+
+.pet_description{
+    margin-left: 40%;
+    background-color: white;
+    padding: 2%;
+    display: inline;
+}}

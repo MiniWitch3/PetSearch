@@ -1,21 +1,25 @@
 {{extend 'layout.html'}}
 
-<div class="single_pet">
-    <div class="petsearch">
+<div class="title_block"><h1 class="title">Pets Page</h1></div>
+
+<div class="select_pet">
+    <div class="single_pet_button">
     {{for p in pet_list:}}
-       {{if p.pet_id == int(request.args(0)):}}
-        <div class="User">
+       {{if p.id == int(request.args(0)):}}
+        <div>
             {{if auth.user_id is None:}}
             {{else:}}
                 {{=A('Edit', _class='btn btn-success', _href=URL('default', 'edit', 'p.id', user_signature=True))}}
                 {{=A('Delete', _class='btn btn-danger', _href=URL('default', 'delete', 'p.id', user_signature=True))}}
             {{pass}}
         </div>
+        </div>
        <h1 class="pet_name">{{=p.name}}</h1>
-       <div class="pet_image"><img src="{{=URL('default', 'download', args="[p.pet_image]")}}" width="500" height="500" /></div>
-       <div class="date_posted">{{p.posted}}</div>
-       <div class="pet_description">{{p.description}}</div>
+       <div class="date_posted"><h4>This pet was posted on:{{=p.posted}}</h4></div>
+    <div class="pet_wrapper">
+         <div class="pet_description">{{=p.description}}</div>
+       <div class="pet_picture"><img src="{{=URL('default', 'download')}}/{{=p.pet_image}}" height="400" width="400"/></div>
+    </div>
        {{pass}}
     {{pass}}
     </div>
-</div>
