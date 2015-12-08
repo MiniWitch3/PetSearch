@@ -9,8 +9,12 @@ def index():
     pet_id = gluon_utils.web2py_uuid()
     return dict(pet_id=pet_id)
 
+def pets():
+    pet_list = db().select(db.pets.ALL)
+    pet_id = request.args(0)
+    return dict(pet_list=pet_list, pet_id=pet_id)
+
 def get_pets():
-    condition_list = []
     qset = db()
     user_selection = request.vars.get('user_selection[]') or request.vars.get('user_selection') or []
     if isinstance(user_selection, (str, unicode)):
@@ -31,17 +35,8 @@ def get_pets():
         if j == "male": qset=qset(db.pets.gender == "Male")
         if j == "female": qset=qset(db.pets.gender == "Female")
 
-
-    #query = reduce(lambda a,b:(a&b),condition_list)
     pet_dict = qset.select()
-
-    #pet_dict = db((db.pets.house_trained == request.vars.house_trained) &
-    #             (db.pets.kid_friendly == request.vars.kid_friendly) &
-    ###          (db.pets.indoor_pet == request.vars.indoor_pet) &
-    #         (db.pets.frequent_exercise == request.vars.frequent_exercise) &
-    #        (db.pets.infrequent_exercise == request.vars.infrequent_exercise) &
-    #       (db.pets.young_pet == request.vars.young_pet) &
-    #      (db.pets.older_pet == request.vars.older_pet)).select()
+    time.sleep(2)
     return response.json(dict(pet_dict=pet_dict))
 
 def addpet():

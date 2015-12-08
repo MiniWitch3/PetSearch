@@ -39,7 +39,7 @@ audio {width:200px}
 .center {width:100%; text-align:center; vertical-align:middle}
 /** end **/
 
-/* Sticky footer begin */
+/* Sticky footer begin
 
 .main {
   padding:20px 0 50px 0;
@@ -57,7 +57,7 @@ audio {width:200px}
     white-space:nowrap;
 }
 
-/* Sticky footer end */
+/* Sticky footer end
 
 .footer {
     border-top:1px #DEDEDE solid;
@@ -129,7 +129,7 @@ div.error {
     padding:5px;
     display:inline-block;
 }
-
+/*
 .topbar {
     padding:10px 0;
     width:100%;
@@ -153,7 +153,7 @@ div.error {
     color:#e1e1e1;
 }
 
-#navbar {float:right; padding:5px; /* same as superfish */}
+#navbar {float:right; padding:5px; /* same as superfish } */
 
 .statusbar {
     background-color:#F5F5F5;
