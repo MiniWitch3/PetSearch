@@ -12,7 +12,8 @@ def index():
 def pets():
     pet_list = db().select(db.pets.ALL)
     pet_id = request.args(0)
-    return dict(pet_list=pet_list, pet_id=pet_id)
+    pic = db(db.pets.pet_id).select().first().pet_image
+    return dict(pet_list=pet_list, pet_id=pet_id, pic=pic)
 
 def get_pets():
     qset = db()

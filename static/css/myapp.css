@@ -48,3 +48,20 @@ div.petsearch{
 .User{
     margin-top: 2%;
 }
+
+.select_pet{
+    margin-top: -7%;
+    background-color: lightblue;
+    padding: 2%;
+    text-align: center;
+}
+
+single_pet_button{
+    margin-top: -2%;
+    background-color: lightblue;
+    float: right;
+    position: absolute;
+}
+
+
+
