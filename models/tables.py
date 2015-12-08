@@ -22,4 +22,5 @@ db.define_table('pets',
                 )
 
 db.pets.posted.readable = db.pets.posted.writable = False
+db.pets.pet_id.readable = db.pets.pet_id.writable = False
 db.pets.posted.default = datetime.utcnow()

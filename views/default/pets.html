@@ -2,8 +2,8 @@
 
 <div class="single_pet">
     <div class="petsearch">
-    {{for p in pet_list}}
-       {{if p.id == int(request.args(0))}}
+    {{for p in pet_list:}}
+       {{if p.pet_id == int(request.args(0)):}}
         <div class="User">
             {{if auth.user_id is None:}}
             {{else:}}
@@ -12,7 +12,7 @@
             {{pass}}
         </div>
        <h1 class="pet_name">{{=p.name}}</h1>
-       <div class="pet_image">{{=A(image.title, _href=URL("show_image", args=p.id))}}</div>
+       <div class="pet_image"><img src="{{=URL('default', 'download', args="[p.pet_image]")}}" width="500" height="500" /></div>
        <div class="date_posted">{{p.posted}}</div>
        <div class="pet_description">{{p.description}}</div>
        {{pass}}

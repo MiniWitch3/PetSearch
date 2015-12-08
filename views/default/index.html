@@ -1,5 +1,36 @@
 {{extend 'layout.html'}}
 
+<div class="title_block"><h1 class="title">Web 2 Pets</h1></div>
+
+<div id="target"></div>
+
+
+
+<script id="template" type="text/ractive">
+
+<div class="petsearch">
+    <div class="drop_down">
+    <select value="{% Cat_or_Dog %}">
+        <option value="cat">Cat</option>
+        <option value="dog">Dog</option>
+    </select>
+    <select value="{% gender %}">
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+    </select>
+    </div>
+
+    <div id="line_check"><input type="checkbox" checked="{% house_trained %}"/>House Trained</div>
+    <div id="line_check"><input type="checkbox" checked="{% kid_friendly %}"/>Kid Friendly</div>
+    <div class="line_check"><input type="checkbox" checked="{% pet_friendly %}"/>Pet Friendly</div>
+    <div class="line_check"><input type="checkbox" checked="{% outdoor_pet %}"/>Outdoor Pet</div>
+    <div class="line_check"><input type="checkbox" checked="{% indoor_pet %}"/>Indoor Pet</div>
+    <div class="line_check"><input type="checkbox" checked="{% frequent_exercise %}"/>Frequent Exercise </div>
+    <div class="line_check"><input type="checkbox" checked="{% infrequent_exercise %}"/>Infrequent Exercise</div>
+    <div class="line_check"><input type="checkbox" checked="{% young_pet %}"/>Young Pet</div>
+    <div class="line_check"><input type="checkbox" checked="{% older_pet %}"/>Older Pet</div>
+    <a class="btn btn-success" on-click="delete_items">Submit</a>
+
 <div class="User">
     {{if auth.user_id is None:}}
         {{=A('Sign Up', _class='btn btn-danger', _href=URL('default', 'user', args=['register']))}}
@@ -9,41 +40,16 @@
     {{pass}}
 </div>
 
-<div id="target"></div>
-
-
-
-<script id="template" type="text/ractive">
-
-<div id="new_msg">
-<div class="search">
-<select>
-  <option value="Cat">Cat</option>
-  <option value="Dog">Dog</option>
-</select>
-<select>
-  <option value="Male">Male</option>
-  <option value="Female">Female</option>
-</select>
-<div id="line_check"><input type="checkbox" checked="{% house_trained %}"/>House Trained</div>
-<div id="line_check"><input type="checkbox" checked="{% kid_friendly %}"/>Kid Friendly</div>
-<div class="line_check"><input type="checkbox" checked="{% pet_friendly %}"/>Pet Friendly</div>
-<div class="line_check"><input type="checkbox" checked="{% outdoor_pet %}"/>Outdoor Pet</div>
-<div class="line_check"><input type="checkbox" checked="{% indoor_pet %}"/>Indoor Pet</div>
-<div class="line_check"><input type="checkbox" checked="{% frequent_exercise %}"/>Frequent Exercise </div>
-<div class="line_check"><input type="checkbox" checked="{% infrequent_exercise %}"/>Infrequent Exercise</div>
-<div class="line_check"><input type="checkbox" checked="{% young_pet %}"/>Young Pet</div>
-<div class="line_check"><input type="checkbox" checked="{% older_pet %}"/>Older Pet</div>
-<a class="btn btn-success" on-click="delete_items">Submit</a>
 </div>
-</div>
+
+
 
  {% #pet_dict:pet_id %}
-       <div class="petsearch">
-       <div class="Boards" data-petid="{% pet_id %}" on-click="goto_pet" ><h2 class="pet_name">{% name %}</h2></div>
-       <div class="pet_image">{% pet_image %}</div>
+ <div class="search">
+       <div class="single_pet" ><h2 class="pet_name"><a href="{% pets_url + "/" + pet_id %}">{% name %}</h2></div>
+       <div class="pet_image"><img src="{{=URL('default', 'download')}}/{% pet_image %}" width="200" height="200" /></div>
        <div class="date_posted">{% posted %}</div>
-       </div>
+ </div>
  {% /pet_dict %}
 
 
@@ -53,7 +59,9 @@
   </div>
 {% /if %}
 
+
 </script>
+
 
 <script>
 $(function() {
@@ -65,9 +73,10 @@ $(function() {
     tripleDelimiters: ['{%%', '%%}'],
     data: {
       pet_dict: {},
+      pets_url: "{{=URL('default','pets')}}",
       pet_id: "{{=pet_id}}",
       list_o_pets: "",
-      loading: true,
+      loading: false,
       search_done: false,
       house_trained: false,
       kid_friendly: false,
@@ -77,17 +86,11 @@ $(function() {
       frequent_exercise: false,
       infrequent_exercise: false,
       young_pet: false,
-      older_pet: false
+      older_pet: false,
+      Cat_or_Dog: "cat",
+      gender: "male"
     },
   });
-
-  //links the corresponding board of posts
-  MAIN.on("goto_pet", function(e) {
-    var el = $(e.node);
-    var pet_id = el.data("petid");
-    window.location = "{{=URL('default', 'pets')}}/" + pet_id;
-  });
-
   // http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
   function generateUUID(){
     var d = new Date().getTime();
@@ -101,8 +104,15 @@ $(function() {
     });
     return uuid;
   }
+    MAIN.on("goto_pet", function(e) {
+    var el = $(e.node);
+    var pet_id = el.data("petid");
+    window.location = "{{=URL('default', 'pets')}}/" + pet_id;
+  });
 MAIN.on('delete_items', function (e) {
-user_selection = [];
+    MAIN.set('loading', true);
+    MAIN.set('pet_dict', {});
+    user_selection = [];
     if(MAIN.get("house_trained") == true){
         user_selection.push("house_trained");
     }
@@ -129,6 +139,18 @@ user_selection = [];
     }
     if(MAIN.get("older_pet") == true){
         user_selection.push("older_pet");
+    }
+    if(MAIN.get("Cat_or_Dog") == "dog"){
+        user_selection.push("dog");
+    }
+    if(MAIN.get("Cat_or_Dog") == "cat"){
+        user_selection.push("cat");
+    }
+    if(MAIN.get("gender") == "male"){
+        user_selection.push("male");
+    }
+    if(MAIN.get("gender") == "female"){
+        user_selection.push("female");
     }
      $.ajax({
        url: "{{=URL('default', 'get_pets')}}",
