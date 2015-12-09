@@ -49,10 +49,22 @@ def addpet():
        session.flash = 'Please fill out all that is necessary.'
     return dict(form=form)
 
-@auth.requires_signature
+@auth.requires_signature()
+@auth.requires_login()
 def delete():
-    db(db.pets.id == request.args(0)).delete()
+    db(db.pets.id == int(request.args(0))).delete()
     redirect(URL('default', 'index'))
+    session.flash = "Post Deleted"
+
+@auth.requires_signature()
+@auth.requires_login()
+def edit():
+    record = db.pets(request.args(0))
+    edit_form = SQLFORM(db.pets, record=record)
+    if edit_form.process().accepted:
+        session.flash = "Post Edited"
+        redirect(URL('default', index))
+    return dict(edit_form=edit_form)
 
 def user():
     """

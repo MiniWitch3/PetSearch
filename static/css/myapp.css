@@ -25,12 +25,11 @@ div.search{
 }
 
 div.petsearch{
-   background-color: lightblue;
-   padding: 10px;
+   background-color: #9FD1D7;
+   color: #2C2F2F;
    height: 500px;
-   margin: 15px;
-   margin-top: -2%;
    padding-bottom: 3%;
+   padding: 1%;
    float: left;
 }
 
@@ -39,10 +38,14 @@ div.petsearch{
     position: relative;
 }
 
-.title_block{
-    background-color: lightblue;
+.search_title_wrapper{
     margin-top: -7%;
-    margin-left: 1%;
+}
+
+.title_block{
+    background-color: #9FD1D7;
+    color: #2C2F2F;
+    padding: 1%;
 }
 
 .User{
@@ -50,7 +53,7 @@ div.petsearch{
 }
 
 .select_pet{
-    background-color: lightblue;
+    background-color: #9FD1D7;
     padding: 5%;
     margin-top: -7%;
 }
@@ -65,7 +68,10 @@ div.petsearch{
 .pet_description{
     margin-left: 40%;
     background-color: white;
+    color: #2C2F2F;
     padding: 2%;
+    height: 100%
+    width: 100%;
     display: inline;
 }
 

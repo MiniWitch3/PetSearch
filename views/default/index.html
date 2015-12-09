@@ -1,12 +1,14 @@
 {{extend 'layout.html'}}
 
-<div class="title_block"><h1 class="title">PetSearch</h1></div>
 
 <div id="target"></div>
 
 
 
 <script id="template" type="text/ractive">
+
+<div class="search_title_wrapper">
+<div class="title_block"><h1 class="title">PetSearch</h1></div>
 
 <div class="petsearch">
     <div class="drop_down">
@@ -29,7 +31,7 @@
     <div class="line_check"><input type="checkbox" checked="{% infrequent_exercise %}"/>Infrequent Exercise</div>
     <div class="line_check"><input type="checkbox" checked="{% young_pet %}"/>Young Pet</div>
     <div class="line_check"><input type="checkbox" checked="{% older_pet %}"/>Older Pet</div>
-    <a class="btn btn-success" on-click="delete_items">Submit</a>
+    <a class="btn btn-success" on-click="delete_items">Search</a>
 
 <div class="User">
     {{if auth.user_id is None:}}
@@ -50,11 +52,13 @@
 
  {% #pet_dict:pet_id %}
  <div class="search">
-       <div class="single_pet" ><h2 class="pet_name"><a href="{% pets_url + "/" + id %}">{% name %}</h2></div>
+       <div class="single_pet" ><h2 class="pet_name"><a href="{% pets_url + "/" + id %}"><b>{% name %}</b></h2></div>
        <div class="pet_image"><img src="{{=URL('default', 'download')}}/{% pet_image %}" width="200" height="200" /></div>
        <div class="date_posted">{% posted %}</div>
  </div>
  {% /pet_dict %}
+
+ </div>
 
 
 </script>
