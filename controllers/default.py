@@ -12,7 +12,8 @@ def index():
 def pets():
     pet_list = db().select(db.pets.ALL)
     pet_id = request.args(0)
-    return dict(pet_list=pet_list, pet_id=pet_id)
+    pic = db(db.pets.pet_id).select().first().pet_image
+    return dict(pet_list=pet_list, pet_id=pet_id, pic=pic)
 
 def get_pets():
     qset = db()
@@ -48,26 +49,22 @@ def addpet():
        session.flash = 'Please fill out all that is necessary.'
     return dict(form=form)
 
-@auth.requires_signature
-def edit():
-    pets = db.pets(request.args(0))
-    if pets is None:
-        session.flash = T('This pet is unavailable.')
-        redirect(URL('index'))
-    if form.process().accepted:
-        session.flash = T('The pet profile has been updated.')
-        redirect(URL('pets', args=[pets.id]))
-    return dict(form=form)
-
-@auth.requires_signature
+@auth.requires_signature()
+@auth.requires_login()
 def delete():
-    deleted = db.pets(request.args(0))
-    if deleted is None:
-        session.flash = T('This pet is unavailable.')
-        redirect(URL('index'))
-    db(db.pets.id == deleted.id).delete()
-    session.flash = T('The pet profile has been removed.')
-    redirect(URL('index'))
+    db(db.pets.id == int(request.args(0))).delete()
+    session.flash = "Post Deleted"
+    redirect(URL('default', 'index'))
+
+@auth.requires_signature()
+@auth.requires_login()
+def edit():
+    record = db.pets(request.args(0))
+    edit_form = SQLFORM(db.pets, record=record)
+    if edit_form.process().accepted:
+        session.flash = "Post Edited"
+        redirect(URL('default', index))
+    return dict(edit_form=edit_form)
 
 def user():
     """
