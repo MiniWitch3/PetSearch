@@ -41,6 +41,8 @@ def get_pets():
         if j == "dog": qset=qset(db.pets.Cat_or_Dog == "Dog")
         if j == "male": qset=qset(db.pets.gender == "Male")
         if j == "female": qset=qset(db.pets.gender == "Female")
+        if j == "any_cat_dog": qset=qset(db.pets.Cat_or_Dog)
+        if j == "any_gender": qset=qset(db.pets.gender)
 
     pet_dict = qset.select()
     time.sleep(2)

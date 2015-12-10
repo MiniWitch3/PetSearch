@@ -13,10 +13,12 @@
 <div class="petsearch">
     <div class="drop_down">
     <select value="{% Cat_or_Dog %}">
+        <option value="any">Any</option>
         <option value="cat">Cat</option>
         <option value="dog">Dog</option>
     </select>
     <select value="{% gender %}">
+        <option value="any">Any</option>
         <option value="male">Male</option>
         <option value="female">Female</option>
     </select>
@@ -90,8 +92,8 @@ $(function() {
       infrequent_exercise: false,
       young_pet: false,
       older_pet: false,
-      Cat_or_Dog: "cat",
-      gender: "male"
+      Cat_or_Dog: "any",
+      gender: "any"
     },
   });
 
@@ -157,11 +159,17 @@ MAIN.on('delete_items', function (e) {
     if(MAIN.get("Cat_or_Dog") == "cat"){
         user_selection.push("cat");
     }
+    if(MAIN.get("Cat_or_Dog") == "any"){
+        user_selection.push("any_cat_dog");
+    }
     if(MAIN.get("gender") == "male"){
         user_selection.push("male");
     }
     if(MAIN.get("gender") == "female"){
         user_selection.push("female");
+    }
+    if(MAIN.get("gender") == "any"){
+        user_selection.push("any_gender");
     }
 
      $.ajax({
