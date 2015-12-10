@@ -35,10 +35,11 @@ Cat/Dog:
     <div class="line_check"><input type="checkbox" checked="{% infrequent_exercise %}"/>Infrequent Exercise</div>
     <div class="line_check"><input type="checkbox" checked="{% young_pet %}"/>Young Pet</div>
     <div class="line_check"><input type="checkbox" checked="{% older_pet %}"/>Older Pet</div>
-    <a class="btn btn-success" on-click="delete_items">Search</a>
+    <a class="btn btn-success" on-click="search_pets">Search</a>
 
 <div class="User">
     {{if auth.user_id is None:}}
+        Shelters sign up or sign in here:
         {{=A('Sign Up', _class='btn btn-danger', _href=URL('default', 'user', args=['register']))}}
 		{{=A('Sign In', _class='btn btn-success', _style='margin-left: 10px', _href=URL('default', 'user', args=['login']))}}
 	{{else:}}
@@ -46,8 +47,8 @@ Cat/Dog:
     {{pass}}
 </div>
 
+<div class="load_all_pets"> <a class="btn btn-success" on-click="load_pets">Show all pets</a></div>
 </div>
-
 {% #if loading %}
   <div id="load_spinner">
     <i class="fa fa-spinner fa-pulse fa-4x"></i>
@@ -123,8 +124,23 @@ $(function() {
     });
     return uuid;
   }
+  MAIN.on('load_pets', function (e) {
+  MAIN.set('loading',true);
 
-MAIN.on('delete_items', function (e) {
+  $.ajax("{{=URL('default', 'load_pets')}}",
+          {
+            method: 'POST',
+            success: function (data) {
+              MAIN.set('pet_dict', data['pet_dict']);
+              MAIN.set('loading', false);
+            }
+          }
+  );
+  });
+
+
+
+MAIN.on('search_pets', function (e) {
     MAIN.set('loading', true);
     MAIN.set('pet_dict', {});
     user_selection = [];

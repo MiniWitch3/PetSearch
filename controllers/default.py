@@ -9,6 +9,12 @@ def index():
     pet_id = gluon_utils.web2py_uuid()
     return dict(pet_id=pet_id)
 
+def load_pets():
+    qset = db()
+    qset = qset(db.pets.id > 0)
+    pet_dict = qset.select()
+    return response.json(dict(pet_dict=pet_dict))
+
 def load_pets_initial():
     if session.pet_results == None:
         qset = db()
