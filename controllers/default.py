@@ -10,9 +10,12 @@ def index():
     return dict(pet_id=pet_id)
 
 def load_pets_initial():
-    qset = db()
-    qset = qset(db.pets.id > 0)
-    pet_dict = qset.select()
+    if session.pet_results == None:
+        qset = db()
+        qset = qset(db.pets.id > 0)
+        pet_dict = qset.select()
+    else:
+        pet_dict = session.pet_results
     return response.json(dict(pet_dict=pet_dict))
 
 def pets():
@@ -45,6 +48,7 @@ def get_pets():
         if j == "any_gender": qset=qset(db.pets.gender)
 
     pet_dict = qset.select()
+    session.pet_results = pet_dict
     time.sleep(2)
     return response.json(dict(pet_dict=pet_dict))
 
