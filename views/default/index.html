@@ -79,7 +79,7 @@ $(function() {
       pets_url: "{{=URL('default','pets')}}",
       pet_id: "{{=pet_id}}",
       list_o_pets: "",
-      loading: false,
+      loading: true,
       search_done: false,
       house_trained: false,
       kid_friendly: false,
@@ -94,6 +94,16 @@ $(function() {
       gender: "male"
     },
   });
+
+    $.ajax("{{=URL('default', 'load_pets_initial')}}",
+          {
+            method: 'POST',
+            success: function (data) {
+              MAIN.set('pet_dict', data['pet_dict']);
+              MAIN.set('loading', false);
+            }
+          }
+  );
 
 
   // http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
@@ -168,6 +178,9 @@ MAIN.on('delete_items', function (e) {
        }
      });
    });
+
+
+
 
 });
 </script>

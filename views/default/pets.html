@@ -13,8 +13,10 @@
             {{pass}}
         </div>
         </div>
-       <h1 class="pet_name">{{=p.name}}</h1>
+        <div class="pet_title_wrapper">
+       <div><h1 class="pet_name"><b>{{=p.name}}</b></h1></div>
        <div class="date_posted"><h4>This pet was posted on:{{=p.posted}}</h4></div>
+        </div>
     <div class="pet_wrapper">
          <div class="pet_description">{{=p.description}}</div>
        <div class="pet_picture"><img src="{{=URL('default', 'download')}}/{{=p.pet_image}}" height="400" width="400"/></div>

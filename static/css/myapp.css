@@ -52,27 +52,26 @@ div.petsearch{
     margin-top: 2%;
 }
 
-.select_pet{
+.pet_title_wrapper{
     background-color: #9FD1D7;
-    padding: 5%;
-    margin-top: -7%;
+    padding: 2%;
+    margin-top: -6%;
 }
 
 .pet_picture{
-  /*   display: inline; */
+    border: 3px solid #111111;
+    width: 405px;
 }
 .pet_wrapper{
-    display:inline
+    padding: 5%;
+    margin-top: -7%;
+    display:inline;
 }
 
 .pet_description{
-    margin-left: 40%;
-    background-color: white;
     color: #2C2F2F;
-    padding: 2%;
-    height: 100%
-    width: 100%;
-    display: inline;
+    margin: 10px;
+    margin-left: 40%;
 }
 
 
