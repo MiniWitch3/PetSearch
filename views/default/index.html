@@ -8,15 +8,19 @@
 <script id="template" type="text/ractive">
 
 <div class="search_title_wrapper">
-<div class="title_block"><h1 class="title">Web 2 Pets</h1></div>
+<div class="title_block"><h1 class="title">Pet Search</h1></div>
 
 <div class="petsearch">
+Cat/Dog:
+    Male/Female:
     <div class="drop_down">
     <select value="{% Cat_or_Dog %}">
+        <option value="any">Any</option>
         <option value="cat">Cat</option>
         <option value="dog">Dog</option>
     </select>
     <select value="{% gender %}">
+        <option value="any">Any</option>
         <option value="male">Male</option>
         <option value="female">Female</option>
     </select>
@@ -77,7 +81,7 @@ $(function() {
       pets_url: "{{=URL('default','pets')}}",
       pet_id: "{{=pet_id}}",
       list_o_pets: "",
-      loading: false,
+      loading: true,
       search_done: false,
       house_trained: false,
       kid_friendly: false,
@@ -88,10 +92,19 @@ $(function() {
       infrequent_exercise: false,
       young_pet: false,
       older_pet: false,
-      Cat_or_Dog: "cat",
-      gender: "male"
+      Cat_or_Dog: "any",
+      gender: "any"
     },
   });
+    $.ajax("{{=URL('default', 'load_pets_initial')}}",
+          {
+            method: 'POST',
+            success: function (data) {
+              MAIN.set('pet_dict', data['pet_dict']);
+              MAIN.set('loading', false);
+            }
+          }
+  );
   // http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
   function generateUUID(){
     var d = new Date().getTime();
@@ -142,11 +155,17 @@ MAIN.on('delete_items', function (e) {
     if(MAIN.get("Cat_or_Dog") == "cat"){
         user_selection.push("cat");
     }
+    if(MAIN.get("Cat_or_Dog") == "any"){
+        user_selection.push("any_cat_dog");
+    }
     if(MAIN.get("gender") == "male"){
         user_selection.push("male");
     }
     if(MAIN.get("gender") == "female"){
         user_selection.push("female");
+    }
+    if(MAIN.get("gender") == "any"){
+        user_selection.push("any_gender");
     }
      $.ajax({
        url: "{{=URL('default', 'get_pets')}}",

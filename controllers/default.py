@@ -9,6 +9,15 @@ def index():
     pet_id = gluon_utils.web2py_uuid()
     return dict(pet_id=pet_id)
 
+def load_pets_initial():
+    if session.pet_results == None:
+        qset = db()
+        qset = qset(db.pets.id > 0)
+        pet_dict = qset.select()
+    else:
+        pet_dict = session.pet_results
+    return response.json(dict(pet_dict=pet_dict))
+
 def pets():
     pet_list = db().select(db.pets.ALL)
     pet_id = request.args(0)
@@ -35,8 +44,11 @@ def get_pets():
         if j == "dog": qset=qset(db.pets.Cat_or_Dog == "Dog")
         if j == "male": qset=qset(db.pets.gender == "Male")
         if j == "female": qset=qset(db.pets.gender == "Female")
+        if j == "any_cat_dog": qset=qset(db.pets.Cat_or_Dog)
+        if j == "any_gender": qset=qset(db.pets.gender)
 
     pet_dict = qset.select()
+    session.pet_results = pet_dict
     time.sleep(2)
     return response.json(dict(pet_dict=pet_dict))
 
@@ -53,8 +65,8 @@ def addpet():
 @auth.requires_login()
 def delete():
     db(db.pets.id == int(request.args(0))).delete()
-    session.flash = "Post Deleted"
     redirect(URL('default', 'index'))
+    session.flash = "Post Deleted"
 
 @auth.requires_signature()
 @auth.requires_login()
