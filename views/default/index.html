@@ -39,7 +39,6 @@ Cat/Dog:
 
 <div class="User">
     {{if auth.user_id is None:}}
-        Shelters sign up or sign in here:
         {{=A('Sign Up', _class='btn btn-danger', _href=URL('default', 'user', args=['register']))}}
 		{{=A('Sign In', _class='btn btn-success', _style='margin-left: 10px', _href=URL('default', 'user', args=['login']))}}
 	{{else:}}
@@ -54,14 +53,17 @@ Cat/Dog:
     <i class="fa fa-spinner fa-pulse fa-4x"></i>
   </div>
 {% /if %}
-
+<div class="pet_results_wrapper">
+<div class="search" class="row">
  {% #pet_dict:pet_id %}
- <div class="search">
+      <div class="pets" class="col-xs-6 col-sm-3">
        <div class="single_pet" ><h2 class="pet_name"><a href="{% pets_url + "/" + id %}"><b>{% name %}</b></h2></div>
-       <div class="pet_image"><img src="{{=URL('default', 'download')}}/{% pet_image %}" width="200" height="200" /></div>
+       <div class="pet_image"><img src="{{=URL('default', 'download')}}/{% pet_image %}" width="140" height="140" class="img-thumbnail" /></div>
        <div class="date_posted">{% posted %}</div>
- </div>
+      </div>
  {% /pet_dict %}
+  </div>
+ </div>
 
  </div>
 

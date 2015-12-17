@@ -18,10 +18,10 @@ div.mydiv {
 div.search{
    background-color: #FFFFFF;
    padding: 20px;
-   margin: 30px;
+   margin: 40px;
+   display: inline;
    /*border: 1px solid #111111; */
    box-shadow(rgba(#111, 0.5) 0 4px 10px 2px);
-   display: inline-block;
 }
 
 div.petsearch{
@@ -78,6 +78,5 @@ div.petsearch{
 .load_all_pets{
     margin-top: 2%;
 }
-
 
 
